@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     res.render('index', {rooms: rooms})
 })
 
-app.get('/:room', (req, res) => {
+app.get('/room/:room', (req, res) => {
     res.render('room', { roomName: req.params.room })
 })
 
