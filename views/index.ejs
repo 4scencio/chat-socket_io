@@ -6,8 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Teste</h1>
+    <h1>Chat with Socket.IO</h1>
 
+    <div id="chat">
+
+    </div>
+    <br>
+    <input id="msg" type="text">
+    <input id="username" type="text" placeholder="Seu nome de usuário">
+    <br>
+    <button >Enviar</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js">
     
     const socket = io('http://localhost:80/')

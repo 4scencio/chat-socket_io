@@ -18,11 +18,13 @@ io.on('connection', (socket) => {
     })
 })
 
+app.set('view engine', 'ejs')
+
 
 app.get('/', (req, res) => {
     res.render('index')
 })
 
-http.listen(80, () => {
+http.listen(3000, () => {
     console.log('Servidor [OK]')
 })
