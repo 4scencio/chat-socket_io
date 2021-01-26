@@ -1,9 +1,22 @@
 const express = require('express')
 const app = express()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http)
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 
+app.set('views', './views')
 app.set('view engine', 'ejs')
+app.use(express.static('public'))
+app.use(express.urlencoded( {extended: true} ))
+
+const rooms = {}
+
+app.get('/', (req, res) => {
+    res.render('index', {rooms: rooms})
+})
+
+app.get('/:room', (req, res) => {
+    res.render('room', { roomName: req.params.room })
+})
 
 io.on('connection', (socket) => {
 
@@ -14,18 +27,11 @@ io.on('connection', (socket) => {
     })
 
     socket.on('msg', (data) => {
-        socket.emit('showMsg', data)
+        io.emit('showMsg', data)
         console.log(data)
     })
 })
 
-app.set('view engine', 'ejs')
-
-
-app.get('/', (req, res) => {
-    res.render('index')
-})
-
-http.listen(3000, () => {
+server.listen(3000, () => {
     console.log('Servidor [OK]')
 })
