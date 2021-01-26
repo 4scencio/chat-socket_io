@@ -6,7 +6,7 @@ const io = require('socket.io')(http)
 app.set('view engine', 'ejs')
 
 io.on('connection', (socket) => {
-    
+
     console.log(`${socket.id} se conectou`)
 
     socket.on('disconnect', () => {
@@ -14,6 +14,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('msg', (data) => {
+        socket.emit('showMsg', data)
         console.log(data)
     })
 })
