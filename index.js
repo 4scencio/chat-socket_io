@@ -6,15 +6,15 @@ const io = require('socket.io')(http)
 app.set('view engine', 'ejs')
 
 io.on('connection', (socket) => {
-
-    socket.on('event01',  (data) => {
-        console.log(data)
-    })
-
+    
     console.log(`${socket.id} se conectou`)
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} se desconectou`)
+    })
+
+    socket.on('msg', (data) => {
+        console.log(data)
     })
 })
 

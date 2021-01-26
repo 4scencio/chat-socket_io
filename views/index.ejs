@@ -16,9 +16,11 @@
     <input id="username" type="text" placeholder="Seu nome de usuário">
     <br>
     <button id="btn">Enviar</button>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
+
+    <script>
     
-    const socket = io('http://localhost:80/')
+    const socket = io('http://localhost:3000/')
 
         socket.on('disconnect',() => {
             console.log('Desconectado')
@@ -36,7 +38,7 @@
 
         let btn = document.getElementById('btn')
         btn.addEventListener('click', enviarMsg)
-        
+
     </script>
 
 </body>
