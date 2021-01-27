@@ -2,36 +2,43 @@ const express = require('express')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const path = require('path')
+const router = require('./routes/routes')
+const session = require('express-session')
 
-app.set('views', './views')
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'ejs')
-app.use(express.static('public'))
 app.use(express.urlencoded( {extended: true} ))
+app.use(session({ secret: 'anythingsecret', cookie: { maxAge: 14_400_000 } }))
 
-const rooms = {}
+//Rotas
+app.use('/', router);
 
-app.get('/', (req, res) => {
-    res.render('index', {rooms: rooms})
-})
+//Socket_IO
 
-app.get('/room/:room', (req, res) => {
-    res.render('room', { roomName: req.params.room })
-})
+    let count = 0
+    
+    io.on('connection', (socket) => {
+        console.log(`O usuário ${socket.id} se conectou.`)
+        count++
+        io.emit('newPerson', count)
+        console.log(count)
+    
+        socket.on('disconnect', () => {
+            count--
+            console.log(count)
+            console.log(`O usuario ${socket.id} se desconectou.`)
+        })
 
-io.on('connection', (socket) => {
-
-    console.log(`${socket.id} se conectou`)
-
-    socket.on('disconnect', () => {
-        console.log(`${socket.id} se desconectou`)
-    })
-
-    socket.on('msg', (data) => {
-        io.emit('showMsg', data)
+    socket.on('message', data => {
         console.log(data)
+        io.emit('renderMessage', { author: data.author, message: data.message })
     })
+
 })
 
-server.listen(3000, () => {
+//Server
+server.listen(80, () => {
     console.log('Servidor [OK]')
 })
